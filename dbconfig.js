@@ -1,12 +1,14 @@
+require('dotenv').config()
+
 const config = {
-  user: "altekdb",
-  password: "WavOffice40Usuario.",
-  server: "107.180.106.95",
-  database: "Logistik_GOSA",
+  user: process.env.DBUSER,
+  password: process.env.PASSWORD,
+  server: process.env.SERVER,
+  database: process.env.DATABASE,
   options: {
     trustedconnection: true,
     enableArithAbort: true,
-    instancename: "SQLEXPRESS2008",
+    instancename: process.env.INSTANCENAME,
     encrypt: false,
   },
   port: 49771,
