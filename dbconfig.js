@@ -11,7 +11,7 @@ const config = {
     instancename: process.env.INSTANCENAME,
     encrypt: false,
   },
-  port: 49771,
+  port: parseInt(process.env.PORTSERVER, 10),
 };
 
 module.exports = config;
