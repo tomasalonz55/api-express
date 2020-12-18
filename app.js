@@ -1,41 +1,46 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var Db = require("./dboperations");
+var Order = require("./order");
+const dboperations = require("./dboperations");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+var express = require("express");
+var bodyParser = require("body-parser");
+var cors = require("cors");
 var app = express();
+var router = express.Router();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cors());
+app.use("/api", router);
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+router.use((request, response, next) => {
+  console.log("middleware");
+  next();
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+router.route("/orders").get((request, response) => {
+  dboperations.getOrders().then((result) => {
+    response.json(result[0]);
+  });
+});
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+router.route("/orders/:id").get((request, response) => {
+  dboperations.getOrder(request.params.id).then((result) => {
+    response.json(result[0]);
+  });
+});
+router.route("/imagen/:id").get((request, response) => {
+  dboperations.getImagen(request.params.id).then((result) => {
+    response.json(result[0]);
+  });
+});
+
+router.route("/orders").post((request, response) => {
+  let order = { ...request.body };
+
+  dboperations.addOrder(order).then((result) => {
+    response.status(201).json(result);
+  });
 });
 
 module.exports = app;
