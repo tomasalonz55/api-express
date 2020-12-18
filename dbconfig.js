@@ -6,7 +6,7 @@ const config = {
   server: process.env.SERVER,
   database: process.env.DATABASE,
   options: {
-    trustedconnection: true,
+    trustedconnection: false,
     enableArithAbort: true,
     instancename: process.env.INSTANCENAME,
     encrypt: false,
